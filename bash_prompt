@@ -25,7 +25,7 @@ function parse_git_branch() {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
 }
 
-function virtualenv_prompt {
+function virtualenv_prompt() {
   if which virtualenv &> /dev/null; then
     virtualenv=$([ ! -z "$VIRTUAL_ENV" ] && echo "`basename $VIRTUAL_ENV`") || return
     echo -e "${ORANGE}$VIRTUALENV_PROMPT_PREFIX${RESET}$virtualenv${ORANGE}$VIRTUALENV_PROMPT_SUFFIX${RESET}"
