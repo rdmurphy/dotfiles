@@ -1,0 +1,26 @@
+# Make Homebrew's Python the main one
+export PATH=/usr/local/bin:/usr/local/share/python:$PATH
+
+# add Postgres.app to path so its psql is used instead of OSX's
+# export PATH=/Applications/Postgres.app/Contents/MacOS/bin:$PATH
+
+# some stuff to make rbenv happy
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+export RBENV_ROOT=/usr/local/opt/rbenv
+
+# add Homebrew's npm to path
+export PATH=/usr/local/share/npm/bin:$PATH
+
+# virtualenv/virtualenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+source /usr/local/share/python/virtualenvwrapper.sh
+
+# set Sublime Text 2 as default editor
+export EDITOR='subl -w'
+
+# source autoenv
+# source /usr/local/opt/autoenv/activate.sh
+
+# ls color stuff
+export CLICOLOR=1
+export LSCOLORS=Dxfxcxdxfxegedabagacad

@@ -1,0 +1,40 @@
+# @rdmurphy's custom bash prompt, cut the cruft!
+
+default_username='ryan'
+
+MINTGREEN=$(tput setaf 78)
+GRAY=$(tput setaf 256)
+ORANGE=$(tput setaf 208)
+LIGHTBLUE=$(tput setaf 123)
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+
+VIRTUALENV_PROMPT_PREFIX=' |'
+VIRTUALENV_PROMPT_SUFFIX='|'
+DIRTY_GIT_ICON='±'
+
+function usernamehost() {
+  if [ $USER != $default_username ]; then echo "${LIGHTBLUE}$USER ${RESET}at ${ORANGE}$HOSTNAME $WHITEin"; fi
+}
+
+function parse_git_dirty() {
+  git diff --quiet --ignore-submodules HEAD 2>/dev/null; [ $? -eq 1 ] && echo -e '$DIRTY_GIT_ICON'
+}
+
+function parse_git_branch() {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
+}
+
+function virtualenv_prompt {
+  if which virtualenv &> /dev/null; then
+    virtualenv=$([ ! -z "$VIRTUAL_ENV" ] && echo "`basename $VIRTUAL_ENV`") || return
+    echo -e "${ORANGE}$VIRTUALENV_PROMPT_PREFIX${RESET}$virtualenv${ORANGE}$VIRTUALENV_PROMPT_SUFFIX${RESET}"
+  fi
+}
+
+function set_prompt() {
+    export PS1="$(usernamehost)${MINTGREEN}\W${RESET}\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")${LIGHTBLUE}${BOLD}$(parse_git_branch)${RESET}$(virtualenv_prompt)\n${GRAY}✧ ${RESET}"
+    echo -ne "\033];${PWD/#$HOME/~}\007"
+}
+
+export PROMPT_COMMAND=set_prompt
